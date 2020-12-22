@@ -1,0 +1,49 @@
+{% extends "layout_wide.html" %}
+
+{% block content %}
+<article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ url_for('static', filename = 'dp/' + post.author.user_image) }}">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="#">{{ post.author.username }}</a>
+            <small class="text-muted">{{ post.date_posted.strftime("%d-%m-%Y  %H:%M") }}</small>
+        </div>
+        <h2>{{ post.title }}</h2>
+        <p class="article-content1">{{ post.content }}</p>
+    </div>
+</article>
+{% if post.author == current_user %}
+<div>
+    <a href="{{ url_for('posts.update_post', post_id = post.id) }}" class="btn btn-success btn-block " role="button"
+        aria-pressed="true">Update</a>
+    <button type="button" class="btn btn-danger btn-block mb-5" data-toggle="modal"
+        data-target="#confirm_delete">Delete</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="confirm_delete" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Confirm Delete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to delete the post?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('posts.delete_post',post_id = post.id) }}" method="POST">
+                    <input type="submit" class="btn btn-danger" value="Delete">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock content %}s
